@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Supplement List</h1>
+
+{% for sup in sups %}
+<div class="card">
+  <div class="card-content">
+    <span class="card-title">{{ sup.name }}</span>
+    <p>Dosage: {{ sup.dosage }}</p>
+    <p>Description: {{ sup.description }}</p>
+    {% if sup.amt > 0 %}
+    <p>Amount: {{ sup.amt }} per day</p>
+    {% else %}
+    <p>Not Taking</p>
+    {% endif %}
+  </div>
+</div>
+{% endfor %} {% endblock %}
