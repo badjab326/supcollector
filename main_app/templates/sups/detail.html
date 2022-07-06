@@ -13,5 +13,9 @@
     <p>Not Taking</p>
     {% endif %}
   </div>
+  <div class="card-action">
+    <a href="{% url 'sups_update' sup.id %}">Edit</a>
+    <a href="{% url 'sups_delete' sup.id %}">Delete</a>
+  </div>
 </div>
 {% endblock %}
