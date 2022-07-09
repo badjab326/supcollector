@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Type Details</h1>
+
+<div class="card">
+  <a href="{% url 'types_detail' type.id %}">
+    <div class="card-content">
+      <span class="card-title">
+        <span class="black-text">{{ type.name }}</span>
+        {{type.method}}</span>
+    </div>
+    <div class="card-action">
+      <a href="{% url 'types_update' type.id %}">Edit</a>
+      <a href="{% url 'types_delete' type.id %}">Delete</a>
+    </div>
+  </a>
+</div>
+
+{% endblock %}

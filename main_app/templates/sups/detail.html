@@ -2,20 +2,109 @@
 
 <h1>Supplement Details</h1>
 
-<div class="card">
-  <div class="card-content">
-    <span class="card-title">{{ sup.name }}</span>
-    <p>Dosage: {{ sup.dosage }}</p>
-    <p>Description: {{ sup.description }}</p>
-    {% if sup.amt > 0 %}
-    <p>Amount: {{ sup.amt }} per day</p>
-    {% else %}
-    <p>Not Taking</p>
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ sup.name }}</span>
+        <p>Dosage: {{ sup.dosage }}</p>
+        <p>Description: {{ sup.description }}</p>
+        {% if sup.amt > 0 %}
+        <p>Amount: {{ sup.amt }} per day</p>
+        {% else %}
+        <p>Not Taking</p>
+        {% endif %}
+      </div>
+      <div class="card-action">
+        <a href="{% url 'sups_update' sup.id %}">Edit</a>
+        <a href="{% url 'sups_delete' sup.id %}">Delete</a>
+      </div>
+    </div>
+    <form action="{% url 'add_taking' sup.id %}" method="post">
+      {% csrf_token %} {{ taking_form.as_p }}
+      <input type="submit" class="btn" value="Mark As Taken" />
+    </form>
+    <br />
+    {% if sup.taken_today %}
+    <div class="card-panel teal-text center-align">
+      {{sup.name}} has been taken today.
+    </div>
     {% endif %}
-  </div>
-  <div class="card-action">
-    <a href="{% url 'sups_update' sup.id %}">Edit</a>
-    <a href="{% url 'sups_delete' sup.id %}">Delete</a>
+  <div class="col s6">
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for taking in sup.taking_set.all %}
+        <tr>
+          <td>{{taking.date}}</td>
+          <td>{{taking.get_time_display}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
-{% endblock %}
+<hr />
+<div class="row">
+  <div class="col s6">
+    <h3>{{ sup.name }}'s Types</h3>
+    {% if sup.types.count %} {% for type in sup.types.all %}
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+          <span style="color: black">{{ type.name }}</span>
+          {{ type.method }}
+        </span>
+      </div>
+      <div class="card-action">
+        <form action="{% url 'assoc_type_delete' sup.id type.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn">Remove</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <h5>No Types Assigned</h5>
+    {% endif %}
+  </div>
+  <div class="col s6">
+    <h3>Available Types</h3>
+    {% if types.count %} {% for type in types.all %}
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+          A <span style="color: black">{{ type.name }}</span>
+          {{ type.method }}
+        </span>
+      </div>
+      <div class="card-action">
+        <form action="{% url 'assoc_type' sup.id type.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn">Add</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <h5>{{sup.name}} Is available in all types </h5>
+    {% endif %}
+  </div>
+
+  <script>
+    var dateEl = document.getElementById("id_date");
+    M.Datepicker.init(dateEl, {
+      format: "yyyy-mm-dd",
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true,
+    });
+
+    var selectEl = document.getElementById("id_time");
+    M.FormSelect.init(selectEl);
+  </script>
+  {% endblock %}
+</div>
