@@ -28,7 +28,7 @@ def sups_index(request):
 def sups_detail(request, sup_id):
   sup = Sup.objects.get(id=sup_id)
   taking_form = TakingForm()
-  types_sup_doesnt_have = Type.objects.exclude(id__in = sup.types.all().values_list('id'))
+  types_sup_doesnt_have = Type.objects.filter(user=request.user).exclude(id__in = sup.types.all().values_list('id'))
   return render(request, 'sups/detail.html', {
     # include the cat and feeding_form in the context
     'sup': sup, 'taking_form': taking_form,
@@ -58,6 +58,11 @@ def assoc_type_delete(request, sup_id, type_id):
   Sup.objects.get(id=sup_id).types.remove(type_id)
   return redirect('detail', sup_id=sup_id)
 
+@login_required
+def types_index(request):
+  type = Type.objects.filter(user=request.user)
+  return render(request, 'types/index.html', {'type': type})
+
 class SupCreate(LoginRequiredMixin, CreateView):
   model = Sup
   fields = ['name', 'dosage', 'description', 'amt']
@@ -74,9 +79,9 @@ class SupDelete(LoginRequiredMixin, DeleteView):
   model = Sup
   success_url = '/supplements/'
 
-class TypeList(LoginRequiredMixin, ListView):
-  model = Type
-  template_name = 'types/index.html'
+# class TypeList(LoginRequiredMixin, ListView):
+#   model = Type
+#   template_name = 'types/index.html'
 
 class TypeDetail(LoginRequiredMixin, DetailView):
   model = Type
@@ -85,6 +90,9 @@ class TypeDetail(LoginRequiredMixin, DetailView):
 class TypeCreate(LoginRequiredMixin, CreateView):
     model = Type
     fields = ['name', 'method']
+    def form_valid(self, form):
+      form.instance.user = self.request.user
+      return super().form_valid(form)
 
 class TypeUpdate(LoginRequiredMixin, UpdateView):
     model = Type

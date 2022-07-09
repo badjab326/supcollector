@@ -7,12 +7,13 @@ from django.contrib.auth.models import User
 TIMES = (
     ('M', 'Morning'),
     ('A', 'Afternoon'),
-    ('D', 'Dinner')
+    ('E', 'Evening')
 )
 
 class Type(models.Model):
   name = models.CharField(max_length=50)
   method = models.CharField(max_length=50)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
 
   def __str__(self):
     return f'{self.method} {self.name}'
