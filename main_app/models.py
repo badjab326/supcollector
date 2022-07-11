@@ -30,7 +30,7 @@ class Sup(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def taken_today(self):
-        return self.taking_set.filter(date=date.today()).count() >= len(TIMES)
+        return self.taking_set.filter(date=date.today()).count() >= 1
 
     def __str__(self):
         return self.name

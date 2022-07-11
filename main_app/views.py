@@ -36,6 +36,11 @@ def sups_detail(request, sup_id):
   })
 
 @login_required
+def types_index(request):
+  types = Type.objects.filter(user=request.user)
+  return render(request, 'types/index.html', {'types': types})
+
+@login_required
 def add_taking(request, sup_id):
   # create the ModelForm using the data in request.POST
   form = TakingForm(request.POST)
@@ -57,11 +62,6 @@ def assoc_type(request, sup_id, type_id):
 def assoc_type_delete(request, sup_id, type_id):
   Sup.objects.get(id=sup_id).types.remove(type_id)
   return redirect('detail', sup_id=sup_id)
-
-@login_required
-def types_index(request):
-  type = Type.objects.filter(user=request.user)
-  return render(request, 'types/index.html', {'type': type})
 
 class SupCreate(LoginRequiredMixin, CreateView):
   model = Sup
@@ -90,6 +90,7 @@ class TypeDetail(LoginRequiredMixin, DetailView):
 class TypeCreate(LoginRequiredMixin, CreateView):
     model = Type
     fields = ['name', 'method']
+    success_url = '/types/'
     def form_valid(self, form):
       form.instance.user = self.request.user
       return super().form_valid(form)

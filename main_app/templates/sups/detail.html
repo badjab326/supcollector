@@ -29,6 +29,10 @@
     <div class="card-panel teal-text center-align">
       {{sup.name}} has been taken today.
     </div>
+    {% else %}
+    <div class="card-panel red-text center-align">
+      Do you need to take your {{sup.name}} today?
+    </div>
     {% endif %}
   <div class="col s6">
     <table class="striped">

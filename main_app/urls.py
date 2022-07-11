@@ -10,7 +10,6 @@ urlpatterns = [
     path('supplements/<int:pk>/update/', views.SupUpdate.as_view(), name='sups_update'),
     path('supplements/<int:pk>/delete/', views.SupDelete.as_view(), name='sups_delete'),
     path('supplements/<int:sup_id>/add_taking/', views.add_taking, name='add_taking'),
-    path('supplements/create/', views.TypeCreate.as_view(), name='type_create'),
     path('supplements/<int:sup_id>/assoc_type/<int:type_id>/', views.assoc_type, name='assoc_type'),
     path('supplements/<int:sup_id>/assoc_type/<int:type_id>/delete/', views.assoc_type_delete, name='assoc_type_delete'),
     path('types/', views.types_index, name='types_index'),

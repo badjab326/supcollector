@@ -5,3 +5,5 @@ from .models import Sup, Type, Taking
 admin.site.register(Sup)
 
 admin.site.register(Type)
+
+admin.site.register(Taking)
