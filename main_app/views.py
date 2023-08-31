@@ -8,8 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Sup, Type, Taking
 from .forms import TakingForm
-import uuid
-import boto3
 
 # Create your views here.
 
@@ -30,7 +28,6 @@ def sups_detail(request, sup_id):
   taking_form = TakingForm()
   types_sup_doesnt_have = Type.objects.filter(user=request.user).exclude(id__in = sup.types.all().values_list('id'))
   return render(request, 'sups/detail.html', {
-    # include the cat and feeding_form in the context
     'sup': sup, 'taking_form': taking_form,
     'types': types_sup_doesnt_have
   })
